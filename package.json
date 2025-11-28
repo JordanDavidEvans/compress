@@ -8,7 +8,7 @@
     "clean": "rm -rf dist",
     "build": "npm run clean && mkdir -p dist && cp -R src/. dist",
     "dev": "wrangler pages dev dist",
-    "deploy": "wrangler pages deploy dist",
+    "deploy": "npm run build && wrangler pages deploy dist",
     "versions:upload": "wrangler versions upload dist"
   },
   "devDependencies": {
