@@ -1,17 +1,11 @@
 {
   "name": "compress",
   "version": "1.0.0",
-  "description": "Static WebP compression site configured for Cloudflare Pages builds and deployments.",
+  "description": "Static WebP compression site packaged for simple zip-and-serve hosting.",
   "private": true,
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "npm run clean && mkdir -p dist && cp -R src/. dist",
-    "dev": "wrangler pages dev dist",
-    "deploy": "npm run build && wrangler pages deploy dist",
-    "versions:upload": "wrangler versions upload dist"
-  },
-  "devDependencies": {
-    "wrangler": "^4.51.0"
+    "build": "npm run clean && mkdir -p dist && cp -R src/. dist"
   }
 }
