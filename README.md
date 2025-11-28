@@ -27,5 +27,12 @@ All processing happens in your browser; no images are uploaded to any server.
 - **Version command:** `npm run versions:upload`.
 - **Root directory:** `/` (build output at `dist`).
 - **Production branch:** `main` (non-production branches supported by Wrangler Pages).
+- **Non-production branch builds:** Enabled (default Pages behavior).
+- **Build cache:** Disabled (safe for static assets; optional to enable later).
+- **Build watch paths:** Include `*` so all paths trigger builds.
+- **API token:** Use the provided `lsqa build token` with permissions for Pages deploys and Workers versions uploads.
 
 > **Heads up:** `wrangler deploy` is a Workers-only command and will fail for this Pages project (see the error in the deploy logs). Always use `wrangler pages deploy`—the `npm run deploy` script already wraps the correct command for you.
+
+### Fixing "Workers-specific command" errors in CI
+If your CI/CD system is still calling `npx wrangler deploy`, switch it to `npm run deploy` so the Pages-specific command runs instead. On Cloudflare Pages, set the **Deploy command** to `npm run deploy`; on other platforms, update the workflow or build step to run the same script after `npm run build` finishes.
