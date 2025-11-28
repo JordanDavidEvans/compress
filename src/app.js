@@ -4,6 +4,18 @@ const dropzone = document.getElementById("dropzone");
 const fileInput = document.getElementById("file-input");
 const results = document.getElementById("results");
 
+const requestDownloadPermission = async () => {
+  if (!navigator.permissions?.query) return;
+  try {
+    const status = await navigator.permissions.query({ name: "downloads" });
+    if (status.state === "prompt" && typeof status.request === "function") {
+      await status.request();
+    }
+  } catch (error) {
+    console.debug("Download permission request skipped", error);
+  }
+};
+
 const syncTargetInputs = (value) => {
   const sanitized = Math.min(Math.max(Number(value) || 500, 50), 5000);
   targetRange.value = sanitized;
@@ -52,6 +64,14 @@ const updateCard = (card, { status, attemptsText, blob, fileName }) => {
           <a class="button primary" href="${url}" download="${fileName}">Download WebP</a>
           <button class="button" type="button" data-action="reset">Clear</button>
         `;
+    requestDownloadPermission();
+    const tempLink = document.createElement("a");
+    tempLink.href = url;
+    tempLink.download = fileName;
+    tempLink.style.display = "none";
+    document.body.appendChild(tempLink);
+    tempLink.click();
+    tempLink.remove();
   } else {
     buttonsEl.innerHTML = `<button class="button" type="button" data-action="reset">Cancel</button>`;
   }
@@ -170,13 +190,18 @@ dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragging
 dropzone.addEventListener("drop", (event) => {
   event.preventDefault();
   dropzone.classList.remove("dragging");
+  requestDownloadPermission();
   handleFiles(event.dataTransfer.files);
 });
 
-dropzone.addEventListener("click", () => fileInput.click());
+dropzone.addEventListener("click", () => {
+  requestDownloadPermission();
+  fileInput.click();
+});
 dropzone.addEventListener("keydown", (event) => {
   if (event.key === "Enter" || event.key === " ") {
     event.preventDefault();
+    requestDownloadPermission();
     fileInput.click();
   }
 });
@@ -192,4 +217,8 @@ results.addEventListener("click", (event) => {
     const card = event.target.closest(".file-card");
     card?.remove();
   }
+});
+
+window.addEventListener("load", () => {
+  requestDownloadPermission();
 });
