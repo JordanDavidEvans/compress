@@ -31,8 +31,10 @@ const dataURLToBlob = (dataURL) => {
 const updateCard = (card, { status, attemptsText, blob, fileName }) => {
   const statusEl = card.querySelector(".status");
   const attemptsEl = card.querySelector(".attempts");
-  const actionsEl = card.querySelector(".actions");
+  const buttonsEl = card.querySelector(".action-buttons");
   const pulse = card.querySelector(".pulse-bar");
+
+  if (!statusEl || !attemptsEl || !buttonsEl || !pulse) return;
 
   statusEl.className = `status ${status}`;
   statusEl.innerHTML =
@@ -46,12 +48,12 @@ const updateCard = (card, { status, attemptsText, blob, fileName }) => {
 
   if (blob && fileName) {
     const url = URL.createObjectURL(blob);
-    actionsEl.innerHTML = `
+    buttonsEl.innerHTML = `
           <a class="button primary" href="${url}" download="${fileName}">Download WebP</a>
           <button class="button" type="button" data-action="reset">Clear</button>
         `;
   } else {
-    actionsEl.innerHTML = `<button class="button" type="button" data-action="reset">Cancel</button>`;
+    buttonsEl.innerHTML = `<button class="button" type="button" data-action="reset">Cancel</button>`;
   }
 };
 
@@ -68,6 +70,9 @@ const createFileCard = (fileName, targetBytes) => {
         </div>
         <div class="actions">
           <span class="status running"><span class="spinner"></span>Compressing</span>
+          <div class="action-buttons">
+            <button class="button" type="button" data-action="reset">Cancel</button>
+          </div>
         </div>
       `;
   results.prepend(card);
