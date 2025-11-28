@@ -23,7 +23,9 @@ All processing happens in your browser; no images are uploaded to any server.
 
 ## Deployment (Cloudflare Pages)
 - **Build command:** `npm run build`
-- **Deploy command:** `npm run deploy` (alias for `wrangler pages deploy dist`).
+- **Deploy command:** `npm run deploy` (runs `npm run build` then `wrangler pages deploy dist`).
 - **Version command:** `npm run versions:upload`.
 - **Root directory:** `/` (build output at `dist`).
 - **Production branch:** `main` (non-production branches supported by Wrangler Pages).
+
+> **Heads up:** `wrangler deploy` is a Workers-only command and will fail for this Pages project (see the error in the deploy logs). Always use `wrangler pages deploy`—the `npm run deploy` script already wraps the correct command for you.
